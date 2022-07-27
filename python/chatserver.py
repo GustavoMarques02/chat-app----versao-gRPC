@@ -28,7 +28,7 @@ class chatserver(chatserver_pb2_grpc.chatserverServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     chatserver_pb2_grpc.add_chatserverServicer_to_server(chatserver(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:5001')
     print("Chat Server is ready...")
     server.start()
     server.wait_for_termination()
