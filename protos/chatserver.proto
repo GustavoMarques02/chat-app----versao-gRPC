@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.iotservice";
+option java_outer_classname = "IoTServiceProto";
+option objc_class_prefix = "TEMP";
+
+package chat_server;
+
+service chatserver {
+    
+    // Send Message
+    rpc SendMessage (Message) returns (EmptyMessage){}
+    
+}
+
+message Message {
+    string text = 1;
+    string nameRecipient = 2;
+    string nameSender = 3;
+}
+ 
+message EmptyMessage {}
