@@ -10,7 +10,7 @@ package chat_server;
 service chatserver {
     
     // Send Message
-    rpc SendMessage (Message) returns (EmptyMessage){}
+    rpc SendMessage (Message) returns (EmptyMessage) {}
     
 }
 
