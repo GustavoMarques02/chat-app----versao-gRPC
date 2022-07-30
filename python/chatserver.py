@@ -24,7 +24,7 @@ class chatserver(chatserver_pb2_grpc.chatserverServicer):
         dest_port = dest_addr[1]
         
 
-        return
+        return chatserver_pb2.EmptyMessage()
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
