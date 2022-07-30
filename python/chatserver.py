@@ -9,12 +9,13 @@ import chatserver_pb2_grpc
 
 class chatserver(chatserver_pb2_grpc.chatserverServicer):
     
-    def SendMessage(text, nameRecipient, nameSender):
-        print("RELAYING MSG: " + text + " - FROM: " + nameSender + " - TO: " + nameRecipient) # just print the message and destination
+    def SendMessage(self, request, context):
+        print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameRecipient) 
+        # just print the message and destination
         #
         # Check that the destination exists
         try:
-            dest_addr = const.registry[nameRecipient] # get address of destination in the registry
+            dest_addr = const.registry[request.nameRecipient] # get address of destination in the registry
         except:
             print ("Error: Destination client does not exist") # to do: send a proper error code
         #
