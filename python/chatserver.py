@@ -1,13 +1,15 @@
+from cgitb import text
 from concurrent import futures
+import grp
 import logging
 
 import const #- addresses, port numbers etc. (a rudimentary way to replace a proper naming service)
 
 import grpc
-import chatserver_pb2
-import chatserver_pb2_grpc
+import ChatService_pb2
+import ChatService_pb2_grpc
 
-class chatserver(chatserver_pb2_grpc.chatserverServicer):
+class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
     
     def SendMessage(self, request, context):
         print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameRecipient) 
@@ -23,12 +25,15 @@ class chatserver(chatserver_pb2_grpc.chatserverServicer):
         dest_ip = dest_addr[0]
         dest_port = dest_addr[1]
         
+        with grp.insecure_channel(dest_ip+':'+dest_port) as channel:
+            stub = ChatService_pb2_grpc.ChatClientStub(channel)
+            stub.ReceiveMessage(ChatService_pb2.Message(text=request.text, nameRecipient=request.nameRecipient, nameSender=request.nameSender))
 
-        return chatserver_pb2.EmptyMessage()
+        return ChatService_pb2.EmptyMessage()
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    chatserver_pb2_grpc.add_chatserverServicer_to_server(chatserver(), server)
+    ChatService_pb2_grpc.add_ChatServiceServicer_to_server(ChatServer(), server)
     server.add_insecure_port('[::]:5001')
     print("Chat Server is ready...")
     server.start()
