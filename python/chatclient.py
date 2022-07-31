@@ -9,12 +9,6 @@ import grpc
 import ChatService_pb2
 import ChatService_pb2_grpc
 
-class ChatClient(ChatService_pb2_grpc.ChatClientServicer):
-    
-    def ReceiveMessage(self, request, context):
-        print("MESSAGE: " + request.text + " - FROM: " + request.nameSender)
-        return ChatService_pb2.EmptyMessage()
-
 def run():
     me = str(sys.argv[1]) # User's name (as registered in the registry. E.g., Alice, Bob, ...)
     while True:
