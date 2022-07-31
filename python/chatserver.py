@@ -24,16 +24,12 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
         # Forward the message to the recipient client
         dest_ip = dest_addr[0]
         dest_port = dest_addr[1]
-        
-        with grp.insecure_channel(dest_ip+':'+dest_port) as channel:
-            stub = ChatService_pb2_grpc.ChatClientStub(channel)
-            stub.ReceiveMessage(ChatService_pb2.Message(text=request.text, nameRecipient=request.nameRecipient, nameSender=request.nameSender))
 
         return ChatService_pb2.EmptyMessage()
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    ChatService_pb2_grpc.add_ChatServiceServicer_to_server(ChatServer(), server)
+    ChatService_pb2_grpc.add_ChatServerServicer_to_server(ChatServer(), server)
     server.add_insecure_port('[::]:5001')
     print("Chat Server is ready...")
     server.start()
