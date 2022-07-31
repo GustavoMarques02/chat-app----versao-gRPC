@@ -14,12 +14,6 @@ service ChatServer {
     
 }
 
-service ChatClient {
-
-    // Receive Message
-    rpc ReceiveMessage (Message) returns (EmptyMessage){}
-}
-
 message Message {
     string text = 1;
     string nameRecipient = 2;

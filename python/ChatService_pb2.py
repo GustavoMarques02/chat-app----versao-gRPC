@@ -11,12 +11,7 @@ from google.protobuf import symbol_database as _symbol_database
 
 _sym_db = _symbol_database.Default()
 
-
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x43hatService.proto\x12\x0c\x63hat_service\"B\n\x07Message\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x15\n\rnameRecipient\x18\x02 \x01(\t\x12\x12\n\nnameSender\x18\x03 \x01(\t\"\x0e\n\x0c\x45mptyMessage2P\n\nChatServer\x12\x42\n\x0bSendMessage\x12\x15.chat_service.Message\x1a\x1a.chat_service.EmptyMessage\"\x00\x32S\n\nChatClient\x12\x45\n\x0eReceiveMessage\x12\x15.chat_service.Message\x1a\x1a.chat_service.EmptyMessage\"\x00\x42\x37\n\x1bio.grpc.examples.iotserviceB\x0fIoTServiceProtoP\x01\xa2\x02\x04TEMPb\x06proto3')
-
-
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x43hatService.proto\x12\x0c\x63hat_service\"B\n\x07Message\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x15\n\rnameRecipient\x18\x02 \x01(\t\x12\x12\n\nnameSender\x18\x03 \x01(\t\"\x0e\n\x0c\x45mptyMessage2P\n\nChatServer\x12\x42\n\x0bSendMessage\x12\x15.chat_service.Message\x1a\x1a.chat_service.EmptyMessage\"\x00\x42\x37\n\x1bio.grpc.examples.iotserviceB\x0fIoTServiceProtoP\x01\xa2\x02\x04TEMPb\x06proto3')
 
 _MESSAGE = DESCRIPTOR.message_types_by_name['Message']
 _EMPTYMESSAGE = DESCRIPTOR.message_types_by_name['EmptyMessage']
@@ -35,7 +30,6 @@ EmptyMessage = _reflection.GeneratedProtocolMessageType('EmptyMessage', (_messag
 _sym_db.RegisterMessage(EmptyMessage)
 
 _CHATSERVER = DESCRIPTOR.services_by_name['ChatServer']
-_CHATCLIENT = DESCRIPTOR.services_by_name['ChatClient']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -46,6 +40,4 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _EMPTYMESSAGE._serialized_end=117
   _CHATSERVER._serialized_start=119
   _CHATSERVER._serialized_end=199
-  _CHATCLIENT._serialized_start=201
-  _CHATCLIENT._serialized_end=284
 # @@protoc_insertion_point(module_scope)
