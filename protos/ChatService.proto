@@ -12,7 +12,7 @@ service ChatServer {
     // Send Message
     rpc SendMessage (Message) returns (EmptyMessage){}
     // Relay Message
-    rpc RelayMessage (EmptyMessage) returns (Message){}
+    rpc RelayMessage (EmptyMessage) returns (stream Message){}
 }
 
 message Message {
