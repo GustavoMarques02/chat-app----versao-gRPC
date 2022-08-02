@@ -13,30 +13,30 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
     def __init__(self):
         self.chats = []
 
-    def RelayMessage(self, request_iterator, context):
+    def RelayMessage(self, request, context):
         lastindex = 0
         while True:
             while len(self.chats) > lastindex:
                 n = self.chats[lastindex]
-                lastindex += 1
-                yield n
+
+                # Check that the destination exists
+                try:
+                    dest_addr = const.registry[n.nameRecipient] # get address of destination in the registry
+                except:
+                    print ("Error: Destination client does not exist") # to do: send a proper error code
+                
+                dest_ip = dest_addr[0]
+                dest_port = dest_addr[1]
+                
+                if dest_ip == request.ip and dest_port == request.port:
+                    lastindex += 1
+                    yield n
+                
 
     def SendMessage(self, request, context):
         print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameRecipient) 
         # just print the message and destination
-        #
-        # Check that the destination exists
-        try:
-            dest_addr = const.registry[request.nameRecipient] # get address of destination in the registry
-        except:
-            print ("Error: Destination client does not exist") # to do: send a proper error code
-        #
-        # Forward the message to the recipient client
-        dest_ip = dest_addr[0]
-        dest_port = dest_addr[1]
-
         self.chats.append(request)
-
         return ChatService_pb2.EmptyMessage()
 
 def serve():

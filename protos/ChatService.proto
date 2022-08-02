@@ -12,13 +12,18 @@ service ChatServer {
     // Send Message
     rpc SendMessage (Message) returns (EmptyMessage){}
     // Relay Message
-    rpc RelayMessage (EmptyMessage) returns (stream Message){}
+    rpc RelayMessage (Recipient) returns (stream Message){}
 }
 
 message Message {
     string text = 1;
     string nameRecipient = 2;
     string nameSender = 3;
+}
+
+message Recipient {
+    string ip = 1;
+    string port = 2;
 }
  
 message EmptyMessage {}

@@ -23,7 +23,10 @@ class Client:
             self.conn.SendMessage(ChatService_pb2.Message(text = msg, nameRecipient = dest, nameSender = self.me))
 
     def __listen_for_messages(self):
-        for message in self.conn.RelayMessage(ChatService_pb2.EmptyMessage()):
+        me_addr = const.registry[self.me]
+        me_ip = me_addr[0]
+        me_port = me_addr[1]
+        for message in self.conn.RelayMessage(ChatService_pb2.Recipient(ip = me_ip, port = me_port)):
             print("MESSAGE: " + message.text + " - FROM: " + message.nameSender)       
         
 if __name__ == '__main__':
