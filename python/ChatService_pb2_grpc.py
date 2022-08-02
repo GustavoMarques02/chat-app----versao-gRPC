@@ -19,6 +19,11 @@ class ChatServerStub(object):
                 request_serializer=ChatService__pb2.Message.SerializeToString,
                 response_deserializer=ChatService__pb2.EmptyMessage.FromString,
                 )
+        self.RelayMessage = channel.unary_unary(
+                '/chat_service.ChatServer/RelayMessage',
+                request_serializer=ChatService__pb2.EmptyMessage.SerializeToString,
+                response_deserializer=ChatService__pb2.Message.FromString,
+                )
 
 
 class ChatServerServicer(object):
@@ -31,6 +36,13 @@ class ChatServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def RelayMessage(self, request, context):
+        """Relay Message
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ChatServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -38,6 +50,11 @@ def add_ChatServerServicer_to_server(servicer, server):
                     servicer.SendMessage,
                     request_deserializer=ChatService__pb2.Message.FromString,
                     response_serializer=ChatService__pb2.EmptyMessage.SerializeToString,
+            ),
+            'RelayMessage': grpc.unary_unary_rpc_method_handler(
+                    servicer.RelayMessage,
+                    request_deserializer=ChatService__pb2.EmptyMessage.FromString,
+                    response_serializer=ChatService__pb2.Message.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -63,5 +80,22 @@ class ChatServer(object):
         return grpc.experimental.unary_unary(request, target, '/chat_service.ChatServer/SendMessage',
             ChatService__pb2.Message.SerializeToString,
             ChatService__pb2.EmptyMessage.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def RelayMessage(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/chat_service.ChatServer/RelayMessage',
+            ChatService__pb2.EmptyMessage.SerializeToString,
+            ChatService__pb2.Message.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
