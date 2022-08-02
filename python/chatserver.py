@@ -1,6 +1,5 @@
 from cgitb import text
 from concurrent import futures
-import grp
 import logging
 
 import const #- addresses, port numbers etc. (a rudimentary way to replace a proper naming service)
@@ -10,7 +9,18 @@ import ChatService_pb2
 import ChatService_pb2_grpc
 
 class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
-    
+
+    def __init__(self):
+        self.chats = []
+
+    def RelayMessage(self, request, context):
+        lastindex = 0
+        while True:
+            while len(self.chats) > lastindex:
+                n = self.chats[lastindex]
+                lastindex += 1
+                yield n
+
     def SendMessage(self, request, context):
         print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameRecipient) 
         # just print the message and destination
@@ -24,6 +34,8 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
         # Forward the message to the recipient client
         dest_ip = dest_addr[0]
         dest_port = dest_addr[1]
+
+        self.chats.append(request)
 
         return ChatService_pb2.EmptyMessage()
 
