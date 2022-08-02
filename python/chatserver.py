@@ -13,7 +13,7 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
     def __init__(self):
         self.chats = []
 
-    def RelayMessage(self, request, context):
+    def RelayMessage(self, request_iterator, context):
         lastindex = 0
         while True:
             while len(self.chats) > lastindex:
