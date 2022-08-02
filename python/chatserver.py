@@ -15,6 +15,7 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
 
     def RelayMessage(self, request, context):
         while True:
+            auxChats = self.chats
             for c in self.chats:
                 # Check that the destination exists
                 try:
@@ -26,9 +27,9 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
                 dest_port = dest_addr[1]
                 
                 if dest_ip == request.ip and dest_port == request.port:
-                    self.chats.remove(c)
+                    auxChats.remove(c)
                     yield c
-                
+            self.chats = auxChats    
 
     def SendMessage(self, request, context):
         print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameRecipient) 
