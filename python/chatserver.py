@@ -1,9 +1,6 @@
-from cgitb import text
 from concurrent import futures
 import logging
-
-import const #- addresses, port numbers etc. (a rudimentary way to replace a proper naming service)
-
+import const
 import grpc
 import ChatService_pb2
 import ChatService_pb2_grpc
@@ -17,25 +14,24 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
         while True:
             auxChats = self.chats
             for c in self.chats:
-                # Check that the destination exists
-                try:
-                    dest_addr = const.registry[c.nameRecipient] # get address of destination in the registry
-                except:
-                    print ("Error: Destination client does not exist") # to do: send a proper error code
-                
+                dest_addr = const.registry[c.nameDestination]
                 dest_ip = dest_addr[0]
                 dest_port = dest_addr[1]
-                
                 if dest_ip == request.ip and dest_port == request.port:
                     auxChats.remove(c)
                     yield c
             self.chats = auxChats    
 
     def SendMessage(self, request, context):
-        print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameRecipient) 
-        # just print the message and destination
-        self.chats.append(request)
-        return ChatService_pb2.EmptyMessage()
+        print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameDestination)
+        try:
+            const.registry[request.nameDestination]
+        except:
+            return ChatService_pb2.Confirmation(confimation = False)
+        else:
+            self.chats.append(request)
+            return ChatService_pb2.Confirmation(confimation = True)
+        
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

@@ -17,11 +17,11 @@ class ChatServerStub(object):
         self.SendMessage = channel.unary_unary(
                 '/chat_service.ChatServer/SendMessage',
                 request_serializer=ChatService__pb2.Message.SerializeToString,
-                response_deserializer=ChatService__pb2.EmptyMessage.FromString,
+                response_deserializer=ChatService__pb2.Confirmation.FromString,
                 )
         self.RelayMessage = channel.unary_stream(
                 '/chat_service.ChatServer/RelayMessage',
-                request_serializer=ChatService__pb2.Recipient.SerializeToString,
+                request_serializer=ChatService__pb2.Destination.SerializeToString,
                 response_deserializer=ChatService__pb2.Message.FromString,
                 )
 
@@ -49,11 +49,11 @@ def add_ChatServerServicer_to_server(servicer, server):
             'SendMessage': grpc.unary_unary_rpc_method_handler(
                     servicer.SendMessage,
                     request_deserializer=ChatService__pb2.Message.FromString,
-                    response_serializer=ChatService__pb2.EmptyMessage.SerializeToString,
+                    response_serializer=ChatService__pb2.Confirmation.SerializeToString,
             ),
             'RelayMessage': grpc.unary_stream_rpc_method_handler(
                     servicer.RelayMessage,
-                    request_deserializer=ChatService__pb2.Recipient.FromString,
+                    request_deserializer=ChatService__pb2.Destination.FromString,
                     response_serializer=ChatService__pb2.Message.SerializeToString,
             ),
     }
@@ -79,7 +79,7 @@ class ChatServer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/chat_service.ChatServer/SendMessage',
             ChatService__pb2.Message.SerializeToString,
-            ChatService__pb2.EmptyMessage.FromString,
+            ChatService__pb2.Confirmation.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -95,7 +95,7 @@ class ChatServer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/chat_service.ChatServer/RelayMessage',
-            ChatService__pb2.Recipient.SerializeToString,
+            ChatService__pb2.Destination.SerializeToString,
             ChatService__pb2.Message.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

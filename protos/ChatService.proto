@@ -10,20 +10,22 @@ package chat_service;
 service ChatServer {
     
     // Send Message
-    rpc SendMessage (Message) returns (EmptyMessage){}
+    rpc SendMessage (Message) returns (Confirmation){}
     // Relay Message
-    rpc RelayMessage (Recipient) returns (stream Message){}
+    rpc RelayMessage (Destination) returns (stream Message){}
 }
 
 message Message {
     string text = 1;
-    string nameRecipient = 2;
+    string nameDestination = 2;
     string nameSender = 3;
 }
 
-message Recipient {
+message Destination {
     string ip = 1;
     string port = 2;
 }
- 
-message EmptyMessage {}
+
+message Confirmation {
+    bool confirmation = 1;
+}

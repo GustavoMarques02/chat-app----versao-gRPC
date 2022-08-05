@@ -2,9 +2,7 @@ from __future__ import print_function
 import threading
 import logging
 import sys
-
-import const #- addresses, port numbers etc. (a rudimentary way to replace a proper naming service)
-
+import const
 import grpc
 import ChatService_pb2
 import ChatService_pb2_grpc
@@ -20,14 +18,17 @@ class Client:
         while True:
             dest = input("ENTER DESTINATION: ")
             msg = input("ENTER MESSAGE: ")
-            self.conn.SendMessage(ChatService_pb2.Message(text = msg, nameRecipient = dest, nameSender = self.me))
+            message = ChatService_pb2.Message(text = msg, nameDestination = dest, nameSender = self.me)
+            confimation = self.conn.SendMessage(message)
+            if not confimation:
+                print("Error: Destination does not exist\n")
 
     def __listen_for_messages(self):
         me_addr = const.registry[self.me]
         me_ip = me_addr[0]
         me_port = me_addr[1]
-        for message in self.conn.RelayMessage(ChatService_pb2.Recipient(ip = me_ip, port = me_port)):
-            print("MESSAGE: " + message.text + " - FROM: " + message.nameSender)       
+        for message in self.conn.RelayMessage(ChatService_pb2.Destination(ip = me_ip, port = me_port)):
+            print("\nMESSAGE: " + message.text + " - FROM: " + message.nameSender + "\n")       
         
 if __name__ == '__main__':
     logging.basicConfig()
