@@ -2,10 +2,10 @@ from concurrent import futures
 import logging
 import const
 import grpc
-import ChatService_pb2
-import ChatService_pb2_grpc
+import ChatService_pb2 as svc
+import ChatService_pb2_grpc as svc_grpc
 
-class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
+class ChatServer(svc_grpc.ChatServerServicer):
 
     def __init__(self):
         self.chats = []
@@ -27,15 +27,15 @@ class ChatServer(ChatService_pb2_grpc.ChatServerServicer):
         try:
             const.registry[request.nameDestination]
         except:
-            return ChatService_pb2.Confirmation(confimation = False)
+            return svc.Confirmation(confimation = False)
         else:
             self.chats.append(request)
-            return ChatService_pb2.Confirmation(confimation = True)
+            return svc.Confirmation(confimation = True)
         
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    ChatService_pb2_grpc.add_ChatServerServicer_to_server(ChatServer(), server)
+    svc_grpc.add_ChatServerServicer_to_server(ChatServer(), server)
     server.add_insecure_port('[::]:5001')
     print("Chat Server is ready...")
     server.start()
