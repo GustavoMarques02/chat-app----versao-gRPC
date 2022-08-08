@@ -21,14 +21,14 @@ class Client:
             message = svc.Message(text = msg, nameDestination = dest, nameSender = self.me)
             confimation = self.conn.SendMessage(message)
             if not confimation:
-                print("Error: Destination does not exist\n")
+                print("Error: Destination does not exist")
 
     def __listen_for_messages(self):
         me_addr = const.registry[self.me]
         me_ip = me_addr[0]
         me_port = me_addr[1]
         for message in self.conn.RelayMessage(svc.Destination(ip = me_ip, port = me_port)):
-            print("\nMESSAGE: " + message.text + " - FROM: " + message.nameSender + "\n")       
+            print("\nMESSAGE: " + message.text + " - FROM: " + message.nameSender)       
         
 if __name__ == '__main__':
     logging.basicConfig()
