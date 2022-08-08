@@ -27,10 +27,10 @@ class ChatServer(svc_grpc.ChatServerServicer):
         try:
             const.registry[request.nameDestination]
         except:
-            return svc.Confirmation(confimation = False)
+            return svc.Confirmation(confirmation = False)
         else:
             self.chats.append(request)
-            return svc.Confirmation(confimation = True)
+            return svc.Confirmation(confirmation = True)
         
 
 def serve():
