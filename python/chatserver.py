@@ -8,7 +8,7 @@ import ChatService_pb2_grpc as svc_grpc
 class ChatServer(svc_grpc.ChatServerServicer):
 
     def __init__(self):
-        self.chatsRelayin = []
+        self.chatsRelaying = []
         self.chatsWaiting = []
 
     def RelayMessage(self, request, context):
@@ -16,16 +16,16 @@ class ChatServer(svc_grpc.ChatServerServicer):
             auxChats = self.chatsWaiting
             for c in auxChats:
                 self.chatsWaiting.remove(c)
-                self.chatsRelayin.append(c)
+                self.chatsRelaying.append(c)
             auxChats = self.chatsRelayin
-            for c in self.chats:
+            for c in self.chatsRelaying:
                 dest_addr = const.registry[c.nameDestination]
                 dest_ip = dest_addr[0]
                 dest_port = dest_addr[1]
                 if dest_ip == request.ip and dest_port == request.port:
                     auxChats.remove(c)
                     yield c
-            self.chats = auxChats    
+            self.chatsRelaying = auxChats    
 
     def SendMessage(self, request, context):
         print("RELAYING MSG: " + request.text + " - FROM: " + request.nameSender + " - TO: " + request.nameDestination)
