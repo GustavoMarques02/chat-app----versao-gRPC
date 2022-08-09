@@ -19,8 +19,8 @@ class Client:
             dest = input("ENTER DESTINATION: ")
             msg = input("ENTER MESSAGE: ")
             message = svc.Message(text = msg, nameDestination = dest, nameSender = self.me)
-            confimation = self.conn.SendMessage(message)
-            if not confimation:
+            response = self.conn.SendMessage(message)
+            if not response.confirmation:
                 print("Error: Destination does not exist")
 
     def __listen_for_messages(self):
