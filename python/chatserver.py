@@ -17,7 +17,7 @@ class ChatServer(svc_grpc.ChatServerServicer):
             for c in auxChats:
                 self.chatsWaiting.remove(c)
                 self.chatsRelaying.append(c)
-            auxChats = self.chatsRelayin
+            auxChats = self.chatsRelaying
             for c in self.chatsRelaying:
                 dest_addr = const.registry[c.nameDestination]
                 dest_ip = dest_addr[0]
