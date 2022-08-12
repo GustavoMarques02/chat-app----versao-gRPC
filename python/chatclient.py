@@ -16,8 +16,8 @@ class Client:
         threading.Thread(target=self.__listen_for_messages).start()
 
         while True:
-            dest = input("ENTER DESTINATION: ")
-            msg = input("ENTER MESSAGE: ")
+            dest = input("ENTER DESTINATION:\n")
+            msg = input("ENTER MESSAGE:\n")
             message = svc.Message(text = msg, nameDestination = dest, nameSender = self.me)
             response = self.conn.SendMessage(message)
             if not response.confirmation:
@@ -28,7 +28,7 @@ class Client:
         me_ip = me_addr[0]
         me_port = me_addr[1]
         for message in self.conn.RelayMessage(svc.Destination(ip = me_ip, port = me_port)):
-            print("\nMESSAGE: " + message.text + " - FROM: " + message.nameSender)       
+            print("MESSAGE: " + message.text + " - FROM: " + message.nameSender)       
         
 if __name__ == '__main__':
     logging.basicConfig()
